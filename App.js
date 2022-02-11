@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import * as Sharing from 'expo-sharing'; 
 import logo from './assets/icon.png'; 
 import * as ImagePicker from 'expo-image-picker';
+import uploadToAnonymousFilesAsync from 'anonymous-files';
 
 
 export default function App() {
@@ -22,16 +24,32 @@ export default function App() {
       return;
     }
 
+    if (Platform.OS === 'web') {
+      let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
+      setSelectedImage({ localUri: pickerResult.uri, remoteUri });
+    } else {
+      setSelectedImage({ localUri: pickerResult.uri, remoteUri: null });
+    } 
+
     setSelectedImage({ localUri: pickerResult.uri });
   };
+
+  let openShareDialogAsync = async () => {
+    if (Platform.OS === 'web') {
+      alert(`The image is available for sharing at: ${selectedImage.remoteUri}`);
+      return;
+    }
+
+    await Sharing.shareAsync(selectedImage.localUri);
+  }; 
 
   if (selectedImage !== null) {
     return (
       <View style={styles.container}>
-        <Image
-          source={{ uri: selectedImage.localUri }}
-          style={styles.thumbnail}
-        />
+        <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail}/>
+        <TouchableOpacity onPress={openShareDialogAsync} style={styles.button}>
+          <Text style={styles.buttonText}>Share this photo</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -45,9 +63,7 @@ export default function App() {
       </Text>
 
 
-      <TouchableOpacity
-        onPress={() => openImagePickerAsync}
-        style={styles.button}>
+      <TouchableOpacity onPress={openImagePickerAsync} style={styles.button}>
         <Text style={styles.buttonText}>Pick a photo</Text>
       </TouchableOpacity>
     </View>
