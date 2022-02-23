@@ -5,6 +5,8 @@ import * as Sharing from 'expo-sharing';
 import logo from './assets/icon.png'; 
 import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
+import Button from 'react-bootstrap/Button';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function App() {
@@ -66,6 +68,7 @@ export default function App() {
       <TouchableOpacity onPress={openImagePickerAsync} style={styles.button}>
         <Text style={styles.buttonText}>Pick a photo</Text>
       </TouchableOpacity>
+      <Button variant="primary">Primary</Button>{styles.button}
     </View>
   );
 }
