@@ -5,7 +5,8 @@ import * as Sharing from 'expo-sharing';
 import logo from './assets/icon.png'; 
 import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
-import Button from 'react-bootstrap/Button';
+//import MusicControl from 'react-native-music-control'
+//import Button from 'react-bootstrap/Button';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -55,7 +56,7 @@ export default function App() {
       </View>
     );
   }
-
+  if (false){
   return (
     <View style={styles.container}>
       <Image source={{ uri: "https://i.imgur.com/TkIrScD.png" }} style={styles.icon} />
@@ -71,6 +72,16 @@ export default function App() {
       <Button variant="primary">Primary</Button>{styles.button}
     </View>
   );
+  }
+
+  return(
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.play}>
+        <Text style={styles.controlText}>''</Text>
+      </TouchableOpacity>
+    </View>
+  )
+
 }
 
 const styles = StyleSheet.create({
@@ -101,5 +112,15 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     resizeMode: "contain"
+  },
+  play: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 5,
+    borderColor: '#000000',
+  },
+  controlText: {
+    fontSize: 20,
+    color: 'black',
   },
 });
