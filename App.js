@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { Audio } from 'expo-av';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './app/nav/AppNavigator';
 
 export default function App() {
   const [sound, setSound] = React.useState();
@@ -8,7 +10,6 @@ export default function App() {
   async function playSound() {
     console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync(
-      //{require: './assets/audio.mp3'}
       {uri: 'http://streaming.livespanel.com:20000/live' },
     );
     setSound(sound);
@@ -17,19 +18,22 @@ export default function App() {
     await sound.playAsync(); 
   }
 
-  React.useEffect(() => {
+  /*const playpause = () => {
+
+
+  } */
+
+  /* React.useEffect(() => {
     return sound
       ? () => {
           console.log('Unloading Sound');
           sound.unloadAsync(); }
       : undefined;
-  }, [sound]);
+  }, [sound]); */
 
-  return (
-    <View style={styles.container}>
-      <Button title="Play Sound" onPress={playSound} />
-    </View>
-  );
+  return <NavigationContainer>
+    <AppNavigator/>
+  </NavigationContainer>
 }
 
 const styles = StyleSheet.create({
