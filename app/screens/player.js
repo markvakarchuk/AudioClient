@@ -6,6 +6,15 @@ import Screen from '../components/Screen';
 import PlayerButton from '../components/PlayerButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AudioContext } from '../context/AudioSource';
+import {
+    changeAudio,
+    moveAudio,
+    pause,
+    play,
+    playNext,
+    resume,
+  } from '../misc/audioController';
+  import { selectAudio } from '../misc/audioController';
 
 const { width } = Dimensions.get('window');
 
@@ -13,7 +22,7 @@ const { width } = Dimensions.get('window');
 // create a component
 const Player = () => {
 //     const [currentPosition, setCurrentPosition] = useState(0);
-//     const context = useContext(AudioContext);
+    const context = useContext(AudioContext);
 //     const { playbackPosition, playbackDuration, currentAudio } = context;
 
 //     const calculateSeebBar = () => {
@@ -32,8 +41,9 @@ const Player = () => {
 //         context.loadPreviousAudio();
 //     }, []);
 
-//     const handlePlayPause = async () => {
-//         // await selectAudio(context.currentAudio, context);
+    const handlePlayPause = async () => {
+        console.log("handlePlayPause")
+        await selectAudio(context.soundObj, context);
 //         // play
 //         if (context.soundObj === null) {
 //           const audio = context.currentAudio;
@@ -64,10 +74,10 @@ const Player = () => {
 //             isPlaying: true,
 //           });
 //         }
-//       };
+      };
     
-//       const handleNext = async () => {
-//         // await changeAudio(context, 'next');
+    //   const handleNext = async () => {
+        // await changeAudio(context, 'next');
 //         const { isLoaded } = await context.playbackObj.getStatusAsync();
 //         const isLastAudio =
 //           context.currentAudioIndex + 1 === context.totalAudioCount;
@@ -105,9 +115,9 @@ const Player = () => {
 //           playbackDuration: null,
 //         });
 //         storeAudioForNextOpening(audio, index);
-//       };
+    //   };
     
-//       const handlePrevious = async () => {
+    //   const handlePrevious = async () => {
 //         // await changeAudio(context, 'previous');
 //         const { isLoaded } = await context.playbackObj.getStatusAsync();
 //         const isFirstAudio = context.currentAudioIndex <= 0;
@@ -152,18 +162,6 @@ const Player = () => {
     };
       const handlePlayPause2 = async () => {
         console.log("handle play/Pause")
-        const [sound, setSound] = React.useState();
-
-        async function playSound() {
-            console.log('Loading Sound');
-            const { sound } = await Audio.Sound.createAsync(
-            {uri: 'http://streaming.livespanel.com:20000/live' },
-            );
-            setSound(sound);
-
-            console.log('Playing Sound');
-            await sound.playAsync(); 
-        }
 
     };
     const handleNext2 = async () => {
@@ -240,7 +238,7 @@ const Player = () => {
               <View style={styles.audioControllers}>
                 <PlayerButton iconType='PREV' onPress={handlePrevious2} />
                 <PlayerButton
-                  onPress={handlePlayPause2}
+                  onPress={handlePlayPause}
                   style={{ marginHorizontal: 25 }}
                 //   iconType={context.isPlaying ? 'PLAY' : 'PAUSE'}
                     iconType={'PAUSE'}

@@ -10,7 +10,6 @@ export class AudioProvider extends Component {
       permissionError: false,
       playbackObj: null,
       soundObj: null,
-      currentAudio: {}, //??
       isPlaying: false,
       playbackPosition: null,
       playbackDuration: null,
@@ -94,12 +93,12 @@ export class AudioProvider extends Component {
     });
 };
 
-  componentDidMount() {
-    // this.getPermission();
-    if (this.state.playbackObj === null) {
-      this.setState({ ...this.state, playbackObj: new Audio.Sound() });
-    }
-  }
+//   componentDidMount() {
+//     // this.getPermission();
+//     if (this.state.playbackObj === null) {
+//       this.setState({ ...this.state, playbackObj: new Audio.Sound() });
+//     }
+//   }
 
   updateState = (prevState, newState = {}) => {
     this.setState({ ...prevState, ...newState });
@@ -107,20 +106,12 @@ export class AudioProvider extends Component {
 
   render() {
     const {
-      audioFiles,
-      playList,
-      addToPlayList,
-      dataProvider,
-      permissionError,
       playbackObj,
       soundObj,
       currentAudio,
       isPlaying,
-      currentAudioIndex,
       playbackPosition,
       playbackDuration,
-      isPlayListRunning,
-      activePlayList,
     } = this.state;
     
     return (
@@ -134,10 +125,7 @@ export class AudioProvider extends Component {
           totalAudioCount: this.totalAudioCount,
           playbackPosition,
           playbackDuration,
-          isPlayListRunning,
-          activePlayList,
           updateState: this.updateState,
-          loadPreviousAudio: this.loadPreviousAudio,
           onPlaybackStatusUpdate: this.onPlaybackStatusUpdate,
         }}
       >

@@ -1,122 +1,121 @@
 import React, { Component, createContext } from 'react';
 import { Text, View, Alert } from 'react-native';
-// import * as MediaLibrary from 'expo-media-library';
-// import { DataProvider } from 'recyclerlistview';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as MediaLibrary from 'expo-media-library';
+import { DataProvider } from 'recyclerlistview';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
-// import { storeAudioForNextOpening } from '../misc/helper';
-// import { playNext } from '../misc/audioController';
+import { storeAudioForNextOpening } from '../misc/helper';
+import { playNext } from '../misc/audioController';
 export const AudioContext = createContext();
-
 export class AudioProvider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    //   audioFiles: [],
-    //   playList: [],
-    //   addToPlayList: null,
+      audioFiles: [],
+      playList: [],
+      addToPlayList: null,
       permissionError: false,
-    //   dataProvider: new DataProvider((r1, r2) => r1 !== r2),
+      dataProvider: new DataProvider((r1, r2) => r1 !== r2),
       playbackObj: null,
       soundObj: null,
-      currentAudio: {}, //??
+      currentAudio: {},
       isPlaying: false,
-    //   isPlayListRunning: false,
-    //   activePlayList: [],
-    //   currentAudioIndex: null, ???
+      isPlayListRunning: false,
+      activePlayList: [],
+      currentAudioIndex: null,
       playbackPosition: null,
       playbackDuration: null,
     };
     this.totalAudioCount = 0;
   }
 
-//   permissionAllert = () => {
-//     Alert.alert('Permission Required', 'This app needs to read audio files!', [
-//       {
-//         text: 'I am ready',
-//         onPress: () => this.getPermission(),
-//       },
-//       {
-//         text: 'cancle',
-//         onPress: () => this.permissionAllert(),
-//       },
-//     ]);
-//   };
+  permissionAllert = () => {
+    Alert.alert('Permission Required', 'This app needs to read audio files!', [
+      {
+        text: 'I am ready',
+        onPress: () => this.getPermission(),
+      },
+      {
+        text: 'cancle',
+        onPress: () => this.permissionAllert(),
+      },
+    ]);
+  };
 
-//   getAudioFiles = async () => {
-//     const { dataProvider, audioFiles } = this.state;
-//     let media = await MediaLibrary.getAssetsAsync({
-//       mediaType: 'audio',
-//     });
-//     media = await MediaLibrary.getAssetsAsync({
-//       mediaType: 'audio',
-//       first: media.totalCount,
-//     });
-//     this.totalAudioCount = media.totalCount;
+  getAudioFiles = async () => {
+    const { dataProvider, audioFiles } = this.state;
+    let media = await MediaLibrary.getAssetsAsync({
+      mediaType: 'audio',
+    });
+    media = await MediaLibrary.getAssetsAsync({
+      mediaType: 'audio',
+      first: media.totalCount,
+    });
+    this.totalAudioCount = media.totalCount;
 
-//     this.setState({
-//       ...this.state,
-//       dataProvider: dataProvider.cloneWithRows([
-//         ...audioFiles,
-//         ...media.assets,
-//       ]),
-//       audioFiles: [...audioFiles, ...media.assets],
-//     });
-//   };
+    this.setState({
+      ...this.state,
+      dataProvider: dataProvider.cloneWithRows([
+        ...audioFiles,
+        ...media.assets,
+      ]),
+      audioFiles: [...audioFiles, ...media.assets],
+    });
+  };
 
-//   loadPreviousAudio = async () => {
-//     let previousAudio = await AsyncStorage.getItem('previousAudio');
-//     let currentAudio;
-//     let currentAudioIndex;
+  loadPreviousAudio = async () => {
+    let previousAudio = await AsyncStorage.getItem('previousAudio');
+    let currentAudio;
+    let currentAudioIndex;
 
-//     if (previousAudio === null) {
-//       currentAudio = this.state.audioFiles[0];
-//       currentAudioIndex = 0;
-//     } else {
-//       previousAudio = JSON.parse(previousAudio);
-//       currentAudio = previousAudio.audio;
-//       currentAudioIndex = previousAudio.index;
-//     }
+    if (previousAudio === null) {
+      currentAudio = this.state.audioFiles[0];
+      currentAudioIndex = 0;
+    } else {
+      previousAudio = JSON.parse(previousAudio);
+      currentAudio = previousAudio.audio;
+      currentAudioIndex = previousAudio.index;
+    }
 
-//     this.setState({ ...this.state, currentAudio, currentAudioIndex });
-//   };
+    this.setState({ ...this.state, currentAudio, currentAudioIndex });
+  };
 
-//   getPermission = async () => {
-//     // {
-//     //     "canAskAgain": true,
-//     //     "expires": "never",
-//     //     "granted": false,
-//     //     "status": "undetermined",
-//     //   }
-//     const permission = await MediaLibrary.getPermissionsAsync();
-//     if (permission.granted) {
-//       //    we want to get all the audio files
-//       this.getAudioFiles();
-//     }
+  getPermission = async () => {
+    // {
+    //     "canAskAgain": true,
+    //     "expires": "never",
+    //     "granted": false,
+    //     "status": "undetermined",
+    //   }
+    const permission = await MediaLibrary.getPermissionsAsync();
+    if (permission.granted) {
+      //    we want to get all the audio files
+      this.getAudioFiles();
+    }
 
-//     if (!permission.canAskAgain && !permission.granted) {
-//       this.setState({ ...this.state, permissionError: true });
-//     }
+    if (!permission.canAskAgain && !permission.granted) {
+      this.setState({ ...this.state, permissionError: true });
+    }
 
-//     if (!permission.granted && permission.canAskAgain) {
-//       const { status, canAskAgain } =
-//         await MediaLibrary.requestPermissionsAsync();
-//       if (status === 'denied' && canAskAgain) {
-//         //   we are going to display alert that user must allow this permission to work this app
-//         this.permissionAllert();
-//       }
+    if (!permission.granted && permission.canAskAgain) {
+      const { status, canAskAgain } =
+        await MediaLibrary.requestPermissionsAsync();
+      if (status === 'denied' && canAskAgain) {
+        //   we are going to display alert that user must allow this permission to work this app
+        this.permissionAllert();
+      }
 
-//       if (status === 'granted') {
-//         //    we want to get all the audio files
-//         this.getAudioFiles();
-//       }
+      if (status === 'granted') {
+        //    we want to get all the audio files
+        this.getAudioFiles();
+      }
 
-//       if (status === 'denied' && !canAskAgain) {
-//         //   we want to display some error to the user
-//         this.setState({ ...this.state, permissionError: true });
-//       }
-//     }
-//   };
+      if (status === 'denied' && !canAskAgain) {
+        //   we want to display some error to the user
+        this.setState({ ...this.state, permissionError: true });
+      }
+    }
+  };
 
   onPlaybackStatusUpdate = async playbackStatus => {
     if (playbackStatus.isLoaded && playbackStatus.isPlaying) {
