@@ -15,6 +15,7 @@ import {
     resume,
   } from '../misc/audioController';
   import { selectAudio } from '../misc/audioController';
+  const stream_uri = 'http://streaming.livespanel.com:20000/live';
 
 const { width } = Dimensions.get('window');
 
@@ -41,40 +42,48 @@ const Player = () => {
 //         context.loadPreviousAudio();
 //     }, []);
 
+    // const handlePlayPause = async () => {
+    //     console.log("handlePlayPause")
+    //     //await selectAudio(context.soundObj, context);
+    //     // play
+    //     if (context.soundObj === null) {
+    //       const audio = context.currentAudio;
+    //       const status = await play(context.playbackObj, audio.uri);
+    //       context.playbackObj.setOnPlaybackStatusUpdate(
+    //         context.onPlaybackStatusUpdate
+    //       );
+    //       return context.updateState(context, {
+    //         soundObj: status,
+    //         currentAudio: audio,
+    //         isPlaying: true,
+    //         currentAudioIndex: context.currentAudioIndex,
+    //       });
+    //     }
+    //     // pause
+    //     if (context.soundObj && context.soundObj.isPlaying) {
+    //       const status = await pause(context.playbackObj);
+    //       return context.updateState(context, {
+    //         soundObj: status,
+    //         isPlaying: false,
+    //       });
+    //     }
+    //     // resume
+    //     if (context.soundObj && !context.soundObj.isPlaying) {
+    //       const status = await resume(context.playbackObj);
+    //       return context.updateState(context, {
+    //         soundObj: status,
+    //         isPlaying: true,
+    //       });
+    //     }
+    //   };
+
     const handlePlayPause = async () => {
-        console.log("handlePlayPause")
-        await selectAudio(context.soundObj, context);
-//         // play
-//         if (context.soundObj === null) {
-//           const audio = context.currentAudio;
-//           const status = await play(context.playbackObj, audio.uri);
-//           context.playbackObj.setOnPlaybackStatusUpdate(
-//             context.onPlaybackStatusUpdate
-//           );
-//           return context.updateState(context, {
-//             soundObj: status,
-//             currentAudio: audio,
-//             isPlaying: true,
-//             currentAudioIndex: context.currentAudioIndex,
-//           });
-//         }
-//         // pause
-//         if (context.soundObj && context.soundObj.isPlaying) {
-//           const status = await pause(context.playbackObj);
-//           return context.updateState(context, {
-//             soundObj: status,
-//             isPlaying: false,
-//           });
-//         }
-//         // resume
-//         if (context.soundObj && !context.soundObj.isPlaying) {
-//           const status = await resume(context.playbackObj);
-//           return context.updateState(context, {
-//             soundObj: status,
-//             isPlaying: true,
-//           });
-//         }
-      };
+        if (audioStreamObj === null ) {
+            
+        } else {
+            
+        }
+    } 
     
     //   const handleNext = async () => {
         // await changeAudio(context, 'next');
