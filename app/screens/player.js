@@ -5,166 +5,73 @@ import color from '../misc/color';
 import Screen from '../components/Screen';
 import PlayerButton from '../components/PlayerButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AudioContext } from '../context/AudioSource';
-import {
-    changeAudio,
-    moveAudio,
-    pause,
-    play,
-    playNext,
-    resume,
-  } from '../misc/audioController';
-  import { selectAudio } from '../misc/audioController';
+// import { AudioContext } from '../context/AudioSource';
+// import {
+//     changeAudio,
+//     moveAudio,
+//     pause,
+//     play,
+//     playNext,
+//     resume,
+//   } from '../misc/audioController';
+//   import { selectAudio } from '../misc/audioController';
+//   import audioControls from '../context/audioControls'
   const stream_uri = 'http://streaming.livespanel.com:20000/live';
 
 const { width } = Dimensions.get('window');
 
+class AudioControls extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          permissionError: false,
+          audioStreamObj: null,
+          currentAudio: null, //{}
+          isPlaying: false,
+          playbackPosition: null,
+          playbackDuration: null,
+        };
+      }
+
+      componentDidMount() {
+          console.log("componentDidMount()")
+        //this.getPermission();
+        if (this.state.audioStreamObj === null) {
+            try {
+                Audio.setAudioModeAsync({
+                    allowsRecordingIOS: false,
+                    interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+                    playsInSilentModeIOS: true,
+                    interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+                    shouldDuckAndroid: true,
+                    staysActiveInBackground: true,
+                    playThroughEarpieceAndroid: true
+                })
+    
+                this.loadAudio()
+            } catch (e) {
+                console.log(e)
+            }
+        }
+      }
+    }
 
 // create a component
 const Player = () => {
-//     const [currentPosition, setCurrentPosition] = useState(0);
-    const context = useContext(AudioContext);
-//     const { playbackPosition, playbackDuration, currentAudio } = context;
-
-//     const calculateSeebBar = () => {
-//         if (playbackPosition !== null && playbackDuration !== null) {
-//         return playbackPosition / playbackDuration;
-//         }
-
-//         if (currentAudio.lastPosition) {
-//         return currentAudio.lastPosition / (currentAudio.duration * 1000);
-//         }
-
-//         return 0;
-//     };
-
-//     useEffect(() => {
-//         context.loadPreviousAudio();
-//     }, []);
-
-    // const handlePlayPause = async () => {
-    //     console.log("handlePlayPause")
-    //     //await selectAudio(context.soundObj, context);
-    //     // play
-    //     if (context.soundObj === null) {
-    //       const audio = context.currentAudio;
-    //       const status = await play(context.playbackObj, audio.uri);
-    //       context.playbackObj.setOnPlaybackStatusUpdate(
-    //         context.onPlaybackStatusUpdate
-    //       );
-    //       return context.updateState(context, {
-    //         soundObj: status,
-    //         currentAudio: audio,
-    //         isPlaying: true,
-    //         currentAudioIndex: context.currentAudioIndex,
-    //       });
-    //     }
-    //     // pause
-    //     if (context.soundObj && context.soundObj.isPlaying) {
-    //       const status = await pause(context.playbackObj);
-    //       return context.updateState(context, {
-    //         soundObj: status,
-    //         isPlaying: false,
-    //       });
-    //     }
-    //     // resume
-    //     if (context.soundObj && !context.soundObj.isPlaying) {
-    //       const status = await resume(context.playbackObj);
-    //       return context.updateState(context, {
-    //         soundObj: status,
-    //         isPlaying: true,
-    //       });
-    //     }
-    //   };
 
     const handlePlayPause = async () => {
-        if (audioStreamObj === null ) {
-            
-        } else {
-            
-        }
+        console.log("handeling play pause")
+        const { isPlaying } = this.state;
+        
+            isPlaying ? await audioStreamObj.pauseAsync() : await audioStreamObj.playAsync()
+    
+            this.setState({
+                isPlaying: !isPlaying
+            })
+
     } 
     
-    //   const handleNext = async () => {
-        // await changeAudio(context, 'next');
-//         const { isLoaded } = await context.playbackObj.getStatusAsync();
-//         const isLastAudio =
-//           context.currentAudioIndex + 1 === context.totalAudioCount;
-//         let audio = context.audioFiles[context.currentAudioIndex + 1];
-//         let index;
-//         let status;
     
-//         if (!isLoaded && !isLastAudio) {
-//           index = context.currentAudioIndex + 1;
-//           status = await play(context.playbackObj, audio.uri);
-//         }
-    
-//         if (isLoaded && !isLastAudio) {
-//           index = context.currentAudioIndex + 1;
-//           status = await playNext(context.playbackObj, audio.uri);
-//         }
-    
-//         if (isLastAudio) {
-//           index = 0;
-//           audio = context.audioFiles[index];
-//           if (isLoaded) {
-//             status = await playNext(context.playbackObj, audio.uri);
-//           } else {
-//             status = await play(context.playbackObj, audio.uri);
-//           }
-//         }
-    
-//         context.updateState(context, {
-//           currentAudio: audio,
-//           playbackObj: context.playbackObj,
-//           soundObj: status,
-//           isPlaying: true,
-//           currentAudioIndex: index,
-//           playbackPosition: null,
-//           playbackDuration: null,
-//         });
-//         storeAudioForNextOpening(audio, index);
-    //   };
-    
-    //   const handlePrevious = async () => {
-//         // await changeAudio(context, 'previous');
-//         const { isLoaded } = await context.playbackObj.getStatusAsync();
-//         const isFirstAudio = context.currentAudioIndex <= 0;
-//         let audio = context.audioFiles[context.currentAudioIndex - 1];
-//         let index;
-//         let status;
-    
-//         if (!isLoaded && !isFirstAudio) {
-//           index = context.currentAudioIndex - 1;
-//           status = await play(context.playbackObj, audio.uri);
-//         }
-    
-//         if (isLoaded && !isFirstAudio) {
-//           index = context.currentAudioIndex - 1;
-//           status = await playNext(context.playbackObj, audio.uri);
-//         }
-    
-//         if (isFirstAudio) {
-//           index = context.totalAudioCount - 1;
-//           audio = context.audioFiles[index];
-//           if (isLoaded) {
-//             status = await playNext(context.playbackObj, audio.uri);
-//           } else {
-//             status = await play(context.playbackObj, audio.uri);
-//           }
-//         }
-    
-//         context.updateState(context, {
-//           currentAudio: audio,
-//           playbackObj: context.playbackObj,
-//           soundObj: status,
-//           isPlaying: true,
-//           currentAudioIndex: index,
-//           playbackPosition: null,
-//           playbackDuration: null,
-//         });
-//         storeAudioForNextOpening(audio, index);
-//       };
 
     const handlePrevious2 = async () => {
           console.log("handle Prev")

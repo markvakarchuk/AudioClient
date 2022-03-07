@@ -1,4 +1,6 @@
-export class AudioProvider extends Component {
+import { Component } from "react";
+
+export class audioControls extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,10 +14,11 @@ export class AudioProvider extends Component {
       }
 
       componentDidMount() {
+          console.log("componentDidMount()")
         //this.getPermission();
         if (this.state.audioStreamObj === null) {
             try {
-                await Audio.setAudioModeAsync({
+                Audio.setAudioModeAsync({
                     allowsRecordingIOS: false,
                     interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
                     playsInSilentModeIOS: true,
@@ -37,7 +40,7 @@ export class AudioProvider extends Component {
 		try {
 			const audioStreamObj = new Audio.Sound()
 			const source = {
-				uri: 
+				uri: stream_uri
 			}
 
 			const status = {
@@ -46,7 +49,7 @@ export class AudioProvider extends Component {
 			}
 
 			playbackInstance.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
-			await playbackInstance.loadAsync(source, status, false)
+			playbackInstance.loadAsync(source, status, false)
 			this.setState({
 				playbackInstance
 			})
