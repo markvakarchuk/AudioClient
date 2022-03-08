@@ -1,6 +1,6 @@
-import { Component } from "react";
+import Player from "../screens/Player";
 
-export class audioControls extends Component {
+export class PlayerControls extends Player {
     constructor(props) {
         super(props);
         this.state = {

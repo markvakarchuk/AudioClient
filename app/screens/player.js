@@ -5,6 +5,7 @@ import color from '../misc/color';
 import Screen from '../components/Screen';
 import PlayerButton from '../components/PlayerButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { PlayerControls } from '../context/audioControls';
 // import { AudioContext } from '../context/AudioSource';
 // import {
 //     changeAudio,
@@ -16,55 +17,56 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 //   } from '../misc/audioController';
 //   import { selectAudio } from '../misc/audioController';
 //   import audioControls from '../context/audioControls'
-  const stream_uri = 'http://streaming.livespanel.com:20000/live';
+const stream_uri = 'http://streaming.livespanel.com:20000/live';
+
+
 
 const { width } = Dimensions.get('window');
 
-class AudioControls extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          permissionError: false,
-          audioStreamObj: null,
-          currentAudio: null, //{}
-          isPlaying: false,
-          playbackPosition: null,
-          playbackDuration: null,
-        };
-      }
+// class AudioControls extends React.Component{
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//           permissionError: false,
+//           audioStreamObj: null,
+//           currentAudio: null, //{}
+//           isPlaying: false,
+//           playbackPosition: null,
+//           playbackDuration: null,
+//         };
+//       }
 
-      componentDidMount() {
-          console.log("componentDidMount()")
-        //this.getPermission();
-        if (this.state.audioStreamObj === null) {
-            try {
-                Audio.setAudioModeAsync({
-                    allowsRecordingIOS: false,
-                    interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-                    playsInSilentModeIOS: true,
-                    interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-                    shouldDuckAndroid: true,
-                    staysActiveInBackground: true,
-                    playThroughEarpieceAndroid: true
-                })
+//       componentDidMount() {
+//           console.log("componentDidMount()")
+//         //this.getPermission();
+//         if (this.state.audioStreamObj === null) {
+//             try {
+//                 Audio.setAudioModeAsync({
+//                     allowsRecordingIOS: false,
+//                     interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+//                     playsInSilentModeIOS: true,
+//                     interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+//                     shouldDuckAndroid: true,
+//                     staysActiveInBackground: true,
+//                     playThroughEarpieceAndroid: true
+//                 })
     
-                this.loadAudio()
-            } catch (e) {
-                console.log(e)
-            }
-        }
-      }
-    }
+//                 this.loadAudio()
+//             } catch (e) {
+//                 console.log(e)
+//             }
+//         }
+//       }
+//     }
 
 // create a component
-const Player = () => {
+r
 
+const Player = () => {
     const handlePlayPause = async () => {
         console.log("handeling play pause")
         const { isPlaying } = this.state;
-        
             isPlaying ? await audioStreamObj.pauseAsync() : await audioStreamObj.playAsync()
-    
             this.setState({
                 isPlaying: !isPlaying
             })
