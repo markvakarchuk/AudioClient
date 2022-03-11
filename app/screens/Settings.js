@@ -6,7 +6,7 @@ import { View, Text, StyleSheet } from 'react-native';
 const Settings = () => {
     return (
         <View style={styles.container}>
-            <Text>Settings</Text>
+            <Text>THis is a burnign pile of shit</Text>
         </View>
     );
 };

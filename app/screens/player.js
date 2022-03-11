@@ -5,7 +5,9 @@ import color from '../misc/color';
 import Screen from '../components/Screen';
 import PlayerButton from '../components/PlayerButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { PlayerControls } from '../context/audioControls';
+import { Audio } from 'expo-av';
+// import { PlayerControls } from '../context/audioControls';
+
 // import { AudioContext } from '../context/AudioSource';
 // import {
 //     changeAudio,
@@ -16,8 +18,8 @@ import { PlayerControls } from '../context/audioControls';
 //     resume,
 //   } from '../misc/audioController';
 //   import { selectAudio } from '../misc/audioController';
-//   import audioControls from '../context/audioControls'
-const stream_uri = 'http://streaming.livespanel.com:20000/live';
+
+const stream_uri = 'http://streaming.livespanel.com:20000/live'
 
 
 
@@ -60,20 +62,77 @@ const { width } = Dimensions.get('window');
 //     }
 
 // create a component
-r
 
 const Player = () => {
-    const handlePlayPause = async () => {
-        console.log("handeling play pause")
-        const { isPlaying } = this.state;
-            isPlaying ? await audioStreamObj.pauseAsync() : await audioStreamObj.playAsync()
-            this.setState({
-                isPlaying: !isPlaying
-            })
+    const [isPlaying, setIsPlaying] = React.useState(false);
+    const [isLoaded, setIsLoaded] = React.useState(false);
+    const [sound, setSound] = React.useState();
 
-    } 
+    async function handlePlayPause() {
+        if (!isLoaded) {
+                // await loadAudio();
+            console.log('loading audio')
+            const { sound } = await Audio.Sound.createAsync(
+                { uri: 'http://streaming.livespanel.com:20000/live' },
+                { shouldPlay: true }
+            );
+            setSound(sound);
+            setIsLoaded(true);
+            //  console.log(sound)
+            console.log('audio state: '+ isLoaded)
+            // await sound.loadAsync();
+            // await sound.playAsync();
+            sound.setVolumeAsync(1);
+        }
+        // console.log('status combination: ' + isLoaded && !isPlaying);
+        // if (isLoaded && !isPlaying) {
+        //     console.log('Starting audio')
+        //     await sound.playAsync();
+        //     setIsPlaying(true)
+        //     // console.log('loaded state: '+ isLoaded);
+        //     // console.log('playing state: '+ isPlaying);
+        //     // isPlaying ? setIsPlaying(true);
+        // }
+        console.log("\nhandeling play pause")
+        // console.log('loaded state: '+ isLoaded)
+        // console.log('playing state: '+ isPlaying)
+        console.log('switching playing state \nfrom: '+ isPlaying + '\nto: ' + !isPlaying)
+        isPlaying ? await sound.pauseAsync() : await sound.playAsync()
+        setIsPlaying(!isPlaying)
+        // this.setState({
+        //     isPlaying: !isPlaying
+        // })
+        const checkStatus = sound.getStatusAsync();
+        console.log("checking status: " + checkStatus)
+
+        }
     
-    
+    async function loadAudio (){
+        console.log('loading audio')
+        const { sound } = await Audio.Sound.createAsync(
+            { uri: 'http://streaming.livespanel.com:20000/live' },
+            { shouldPlay: true }
+         );
+        setSound(sound);
+        setIsLoaded(true);
+        //  console.log(sound)
+        console.log('audio state: '+ isLoaded)
+        await sound.loadAsync();
+        await sound.playAsync();
+        sound.setVolumeAsync(1);
+        //  setIsPlaying(true)
+    }
+    async function handleUnload (){
+        console.log('Handling Unload')
+        console.log("need to unload:" + isLoaded)
+        if (isLoaded) {
+            console.log("unloading")
+            sound.unloadAsync();
+            setIsLoaded(false);
+            setIsPlaying(false)
+        }
+        
+    }
 
     const handlePrevious2 = async () => {
           console.log("handle Prev")
@@ -161,7 +220,7 @@ const Player = () => {
                 //   iconType={context.isPlaying ? 'PLAY' : 'PAUSE'}
                     iconType={'PAUSE'}
                 />
-                <PlayerButton iconType='NEXT' onPress={handleNext2} />
+                <PlayerButton iconType='NEXT' onPress={handleUnload} />
               </View>
             </View>
           {/* </View> */}
